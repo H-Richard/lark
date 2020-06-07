@@ -1,5 +1,6 @@
 import React from 'react';
 import LarkContentEditable, { ContentEditableEvent } from '../Containers/LarkContentEditable'
+import { connect } from 'react-redux';
 import InputRegion from './InputRegion'
 
 import Grid from '@material-ui/core/Grid';
@@ -68,7 +69,9 @@ function isBlockElement(input_text: string | null): [boolean, string, string] {
 }
 
 var testdebug = 1;
-type LarkInputLineProps = {};
+type LarkInputLineProps = {
+    position: Number
+};
 type LarkInputLineState = {
     // Variables
     block_element_id_visible: boolean,
@@ -82,7 +85,8 @@ type LarkInputLineState = {
     input_block_id_tag_style: string,
     input_region_tag_style: string,
 };
-export default class LarkInputLine extends React.Component<LarkInputLineProps, LarkInputLineState> {
+
+class LarkInputLine extends React.Component<LarkInputLineProps, LarkInputLineState> {
     blockElementIDRef: React.RefObject<BlockElementID>;
     inputRegionRef: React.RefObject<InputRegion>;
     constructor(props: LarkInputLineProps) {
@@ -228,7 +232,7 @@ export default class LarkInputLine extends React.Component<LarkInputLineProps, L
         }
 
         if (event.keyCode == 8) {
-            console.log('DELETEEE');
+            console.log("POSITION HERE!!!!", this.props.position);
         }
     }
 
@@ -257,3 +261,9 @@ export default class LarkInputLine extends React.Component<LarkInputLineProps, L
 type LarkEditorProps = {};
 type LarkEditorState = {};
 class LarkEditor extends React.Component<LarkEditorProps, LarkEditorState> { };
+
+const mapStateToProps = (state: any) => {
+    return { position: state.currentCaretPos };
+};
+
+export default connect(mapStateToProps, null)(LarkInputLine);
